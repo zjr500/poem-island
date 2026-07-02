@@ -1,0 +1,110 @@
+<!-- 诗岛前端：双卷轴布局，左通用底座 / 右风格模型，点卷轴弹手稿。 -->
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>诗岛</title>
+    <link rel="stylesheet" href="./styles.css?v=20260615-dual-scroll" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <button class="icon-button" id="backBtn" title="返回地图" aria-label="返回地图">⌂</button>
+        <div class="brand">
+          <strong>诗岛</strong>
+          <span id="locationLabel">诗岛地图</span>
+        </div>
+        <button class="icon-button" id="settingsBtn" title="创作偏好" aria-label="创作偏好">⚙</button>
+      </header>
+
+      <section class="map-view active" id="mapView">
+        <img class="map-art" src="../../assets/poem-island-v2/island_map.png" alt="诗岛地图" />
+        <button class="map-hotspot bamboo" data-scene="wangwei"><span>王维</span><small>正在听雨</small></button>
+        <button class="map-hotspot moon" data-scene="libai"><span>李白</span><small>赏月中</small></button>
+        <button class="map-hotspot market" data-scene="baijuyi"><span>白居易</span><small>集市闲谈</small></button>
+      </section>
+
+      <section class="scene-view" id="sceneView">
+        <img class="scene-bg" id="sceneBg" src="../../assets/poem-island-v2/bamboo_tea.png" alt="" />
+        <div class="scene-overlay">
+          <div class="poet-stage" id="poetStage">
+            <div class="poet-sprite" id="poetSprite" aria-hidden="true">
+              <img src="../../assets/poem-island-v2/character_wangwei.png" alt="" />
+              <span class="eye left"></span>
+              <span class="eye right"></span>
+            </div>
+            <div class="dialogue" id="dialogueText">今日山雨将至，倒适合写一句清静诗。</div>
+          </div>
+
+          <!-- 双卷轴 -->
+          <div class="dual-scrolls">
+            <div class="result-scroll" id="scrollGeneral" data-model="general" tabindex="0">
+              <div class="scroll-head">
+                <strong>通用底座</strong>
+                <span id="metaGeneral">Transformer-6L · 规则约束 · 候选重排</span>
+              </div>
+              <pre id="poemGeneral">空山新雨晚风微
+竹影轻摇入翠扉
+一盏清茶人不语
+半庭明月照僧衣</pre>
+            </div>
+            <div class="result-scroll" id="scrollStyle" data-model="style" tabindex="0">
+              <div class="scroll-head">
+                <strong>风格模型</strong>
+                <span id="metaStyle">Transformer · RAG · Adapter</span>
+              </div>
+              <pre id="poemStyle">明月随人入酒卮
+长风吹梦过天涯
+一声横笛云边起
+万里春江落晚霞</pre>
+            </div>
+          </div>
+        </div>
+
+        <nav class="action-dock">
+          <button data-action="continue">递一句诗</button>
+          <button data-action="acrostic">心愿笺</button>
+        </nav>
+      </section>
+
+      <!-- 手稿面板：点击卷轴后弹出，不主动弹出 -->
+      <aside class="manuscript-panel" id="manuscriptPanel" aria-hidden="true">
+        <div class="panel-head">
+          <strong id="draftTitle">手稿</strong>
+          <button class="icon-button" id="closeDrafts" title="关闭" aria-label="关闭">×</button>
+        </div>
+        <div class="draft-list" id="draftList"></div>
+      </aside>
+
+      <!-- 创作偏好 -->
+      <aside class="settings-panel" id="settingsPanel" aria-hidden="true">
+        <div class="panel-head">
+          <strong>创作偏好</strong>
+          <button class="icon-button" id="closeSettings" title="关闭" aria-label="关闭">×</button>
+        </div>
+        <label>temperature <strong id="tempValue">0.9</strong><input id="tempRange" type="range" min="0.6" max="1.2" step="0.1" value="0.9" /></label>
+        <label>top-k <strong id="topkValue">50</strong><input id="topkRange" type="range" min="20" max="100" step="10" value="50" /></label>
+        <label>手稿数量 <strong id="draftValue">5</strong><input id="draftCount" type="range" min="3" max="10" step="1" value="5" /></label>
+        <div class="segments">
+          <button type="button" class="selected" data-preset="stable">稳定</button>
+          <button type="button" data-preset="balanced">平衡</button>
+          <button type="button" data-preset="inspire">灵感</button>
+        </div>
+      </aside>
+
+      <!-- 输入弹窗 -->
+      <div class="modal" id="inputModal" aria-hidden="true">
+        <form class="modal-box" id="inputForm">
+          <strong id="modalTitle">递一句诗</strong>
+          <input id="conditionInput" maxlength="7" autocomplete="off" />
+          <div class="modal-actions">
+            <button type="button" id="cancelInput">取消</button>
+            <button type="submit">递出</button>
+          </div>
+        </form>
+      </div>
+    </main>
+    <script src="./app.js?v=20260615-dual-scroll"></script>
+  </body>
+</html>
